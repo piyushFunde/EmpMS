@@ -35,16 +35,6 @@ This project implements an employee management system with the following compone
   - Singleton pattern for database connections
   - Centralized connection management
 
-## 📁 File Structure
-
-```
-javaproject/
-├── Main.java              # Core payroll system & OOP demo
-├── EmployeeGUI.java       # Swing GUI for employee management
-├── InsertEmployee.java    # Direct database insertion example
-├── DBhelper.java          # Database connection helper
-└── README.md              # Project documentation
-```
 
 ## 🔑 Key Features
 
@@ -171,6 +161,3 @@ payRollSystem.displayEmployees();
 - Salary reports and analytics
 - User authentication
 - Data export to CSV/PDF
-
----
-**Last Updated**: 2024
