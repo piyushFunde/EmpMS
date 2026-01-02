@@ -36,31 +36,37 @@ public class EmployeeGUI {
         frame.add(viewBtn);
 
         // 🔘 Insert button action
-        insertBtn.addActionListener(e -> {
-            String name = nameField.getText();
-            int age;
+         insertBtn.addActionListener(e -> {
+            String name = nameField.getText().trim();
+            String ageText = ageField.getText().trim();
+
+            if (name.isEmpty() || ageText.isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "All fields are required!");
+                return;
+            }
 
             try {
-                age = Integer.parseInt(ageField.getText());
+                int age = Integer.parseInt(ageText);
 
                 Connection conn = DBhelper.getConnection();
-                String query = "INSERT INTO employee (name, age) VALUES (?, ?)";
+                String query = "INSERT INTO employee(name, age) VALUES (?, ?)";
                 PreparedStatement ps = conn.prepareStatement(query);
                 ps.setString(1, name);
                 ps.setInt(2, age);
+                ps.executeUpdate();
 
-                int rows = ps.executeUpdate();
-                if (rows > 0) {
-                    JOptionPane.showMessageDialog(frame, "Employee inserted successfully!");
-                }
+                JOptionPane.showMessageDialog(frame, "Employee Added Successfully!");
+
+                nameField.setText("");
+                ageField.setText("");
 
                 ps.close();
                 conn.close();
 
-            } catch (NumberFormatException nfe) {
-                JOptionPane.showMessageDialog(frame, "Invalid age format.");
-            } catch (SQLException se) {
-                JOptionPane.showMessageDialog(frame, "Database error: " + se.getMessage());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(frame, "Age must be a number!");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(frame, "Database Error: " + ex.getMessage());
             }
         });
 
