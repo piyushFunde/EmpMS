@@ -71,28 +71,28 @@ public class EmployeeGUI {
         });
 
         // 👀 View All button action
-        viewBtn.addActionListener(e -> {
+       viewBtn.addActionListener(e -> {
             try {
                 Connection conn = DBhelper.getConnection();
-                String query = "SELECT * FROM employee";
                 Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
+                ResultSet rs = st.executeQuery("SELECT * FROM employee");
 
-                StringBuilder sb = new StringBuilder();
+                StringBuilder data = new StringBuilder();
                 while (rs.next()) {
-                    sb.append("ID: ").append(rs.getInt("id"))
-                            .append(", Name: ").append(rs.getString("name"))
-                            .append(", Age: ").append(rs.getInt("age"))
-                            .append("\n");
+                    data.append("ID: ").append(rs.getInt("id"))
+                        .append(" | Name: ").append(rs.getString("name"))
+                        .append(" | Age: ").append(rs.getInt("age"))
+                        .append("\n");
                 }
 
-                JOptionPane.showMessageDialog(frame, sb.toString());
+                JOptionPane.showMessageDialog(frame, data.toString());
 
                 rs.close();
                 st.close();
                 conn.close();
-            } catch (SQLException se) {
-                JOptionPane.showMessageDialog(frame, "Error fetching data: " + se.getMessage());
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(frame, "Error Fetching Data!");
             }
         });
 
