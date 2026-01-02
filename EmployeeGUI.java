@@ -2,6 +2,7 @@ package OOPS.Project;
 
 import javax.swing.*;
 import java.sql.*;
+import java.awt.*;
 
 public class EmployeeGUI {
     public static void main(String[] args) {
