@@ -6,34 +6,60 @@ import java.awt.*;
 
 public class EmployeeGUI {
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Employee Manager");
-        frame.setSize(400, 300);
+        JFrame frame = new JFrame("Employee Management System");
+        frame.setSize(450, 350);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(null);
+        frame.setLocationRelativeTo(null); // center window
 
-        JLabel nameLabel = new JLabel("Name:");
-        nameLabel.setBounds(20, 30, 80, 25);
-        frame.add(nameLabel);
+        // Main panel
+        JPanel panel = new JPanel();
+        panel.setBackground(new Color(245, 248, 250));
+        panel.setLayout(new BorderLayout(10, 10));
+        frame.add(panel);
 
+        // Title
+        JLabel title = new JLabel("Employee Manager", JLabel.CENTER);
+        title.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        title.setForeground(new Color(33, 37, 41));
+        panel.add(title, BorderLayout.NORTH);
+
+        // Form panel
+        JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        formPanel.setBackground(new Color(245, 248, 250));
+
+        JLabel nameLabel = new JLabel("Employee Name:");
         JTextField nameField = new JTextField();
-        nameField.setBounds(100, 30, 200, 25);
-        frame.add(nameField);
 
-        JLabel ageLabel = new JLabel("Age:");
-        ageLabel.setBounds(20, 70, 80, 25);
-        frame.add(ageLabel);
-
+        JLabel ageLabel = new JLabel("Employee Age:");
         JTextField ageField = new JTextField();
-        ageField.setBounds(100, 70, 200, 25);
-        frame.add(ageField);
+
+        formPanel.add(nameLabel);
+        formPanel.add(nameField);
+        formPanel.add(ageLabel);
+        formPanel.add(ageField);
+
+        panel.add(formPanel, BorderLayout.CENTER);
+
+        // Button panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(245, 248, 250));
 
         JButton insertBtn = new JButton("Insert");
-        insertBtn.setBounds(100, 120, 90, 30);
-        frame.add(insertBtn);
-
         JButton viewBtn = new JButton("View All");
-        viewBtn.setBounds(210, 120, 90, 30);
-        frame.add(viewBtn);
+
+        insertBtn.setBackground(new Color(40, 167, 69));
+        insertBtn.setForeground(Color.WHITE);
+        insertBtn.setFocusPainted(false);
+
+        viewBtn.setBackground(new Color(0, 123, 255));
+        viewBtn.setForeground(Color.WHITE);
+        viewBtn.setFocusPainted(false);
+
+        buttonPanel.add(insertBtn);
+        buttonPanel.add(viewBtn);
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
 
         // 🔘 Insert button action
          insertBtn.addActionListener(e -> {
