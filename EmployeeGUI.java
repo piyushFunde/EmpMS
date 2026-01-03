@@ -1,127 +1,115 @@
-package OOPS.Project;
+package OOPS;
 
+import OOPS.EmployeeDAO;
+import OOPS.Employee;
 import javax.swing.*;
-import java.sql.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.List;
 
-public class EmployeeGUI {
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Employee Management System");
-        frame.setSize(450, 350);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null); // center window
+public class EmployeeGUI extends JFrame {
+    private JTextField nameField, ageField, salaryField;
+    private JTable table;
+    private DefaultTableModel tableModel;
+    private EmployeeDAO dao = new EmployeeDAO();
 
-        // Main panel
-        JPanel panel = new JPanel();
-        panel.setBackground(new Color(245, 248, 250));
-        panel.setLayout(new BorderLayout(10, 10));
-        frame.add(panel);
+    public EmployeeGUI() {
+        setTitle("Employee Management System");
+        setSize(800, 500);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(new BorderLayout(10, 10));
 
-        // Title
-        JLabel title = new JLabel("Employee Manager", JLabel.CENTER);
-        title.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        title.setForeground(new Color(33, 37, 41));
-        panel.add(title, BorderLayout.NORTH);
+        // --- Header ---
+        JLabel title = new JLabel("Employee Management System", JLabel.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 24));
+        title.setOpaque(true);
+        title.setBackground(new Color(41, 128, 185));
+        title.setForeground(Color.WHITE);
+        add(title, BorderLayout.NORTH);
 
-        // Form panel
-        JPanel formPanel = new JPanel(new GridLayout(2, 2, 10, 10));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
-        formPanel.setBackground(new Color(245, 248, 250));
+        // --- Input Panel ---
+        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        inputPanel.add(new JLabel("Name:"));
+        nameField = new JTextField();
+        inputPanel.add(nameField);
+        inputPanel.add(new JLabel("Age:"));
+        ageField = new JTextField();
+        inputPanel.add(ageField);
+        inputPanel.add(new JLabel("Salary:"));
+        salaryField = new JTextField();
+        inputPanel.add(salaryField);
 
-        JLabel nameLabel = new JLabel("Employee Name:");
-        JTextField nameField = new JTextField();
+        JButton addBtn = new JButton("Add Employee");
+        addBtn.setBackground(new Color(46, 204, 113));
+        addBtn.addActionListener(e -> handleAddEmployee());
+        inputPanel.add(addBtn);
+        
+        add(inputPanel, BorderLayout.WEST);
 
-        JLabel ageLabel = new JLabel("Employee Age:");
-        JTextField ageField = new JTextField();
+        // --- Table Panel ---
+        tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Age", "Salary"}, 0);
+        table = new JTable(tableModel);
+        add(new JScrollPane(table), BorderLayout.CENTER);
 
-        formPanel.add(nameLabel);
-        formPanel.add(nameField);
-        formPanel.add(ageLabel);
-        formPanel.add(ageField);
+        // --- Bottom Panel (Actions) ---
+        JPanel actionPanel = new JPanel();
+        JButton viewBtn = new JButton("Refresh List");
+        JButton deleteBtn = new JButton("Delete Selected");
+        deleteBtn.setBackground(new Color(231, 76, 60));
+        deleteBtn.setForeground(Color.WHITE);
 
-        panel.add(formPanel, BorderLayout.CENTER);
+        viewBtn.addActionListener(e -> loadData());
+        deleteBtn.addActionListener(e -> handleDelete());
 
-        // Button panel
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(new Color(245, 248, 250));
+        actionPanel.add(viewBtn);
+        actionPanel.add(deleteBtn);
+        add(actionPanel, BorderLayout.SOUTH);
 
-        JButton insertBtn = new JButton("Insert");
-        JButton viewBtn = new JButton("View All");
+        loadData();
+        setVisible(true);
+    }
 
-        insertBtn.setBackground(new Color(40, 167, 69));
-        insertBtn.setForeground(Color.WHITE);
-        insertBtn.setFocusPainted(false);
+    private void handleAddEmployee() {
+        try {
+            String name = nameField.getText();
+            int age = Integer.parseInt(ageField.getText());
+            double salary = Double.parseDouble(salaryField.getText());
 
-        viewBtn.setBackground(new Color(0, 123, 255));
-        viewBtn.setForeground(Color.WHITE);
-        viewBtn.setFocusPainted(false);
-
-        buttonPanel.add(insertBtn);
-        buttonPanel.add(viewBtn);
-
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-
-        // 🔘 Insert button action
-         insertBtn.addActionListener(e -> {
-            String name = nameField.getText().trim();
-            String ageText = ageField.getText().trim();
-
-            if (name.isEmpty() || ageText.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "All fields are required!");
+            if (name.isEmpty() || salary <= 0) {
+                JOptionPane.showMessageDialog(this, "Valid Name and Positive Salary required!");
                 return;
             }
 
-            try {
-                int age = Integer.parseInt(ageText);
-
-                Connection conn = DBhelper.getConnection();
-                String query = "INSERT INTO employee(name, age) VALUES (?, ?)";
-                PreparedStatement ps = conn.prepareStatement(query);
-                ps.setString(1, name);
-                ps.setInt(2, age);
-                ps.executeUpdate();
-
-                JOptionPane.showMessageDialog(frame, "Employee Added Successfully!");
-
-                nameField.setText("");
-                ageField.setText("");
-
-                ps.close();
-                conn.close();
-
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(frame, "Age must be a number!");
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(frame, "Database Error: " + ex.getMessage());
+            if (dao.addEmployee(new Employee(name, age, salary))) {
+                JOptionPane.showMessageDialog(this, "Success!");
+                loadData();
             }
-        });
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+        }
+    }
 
-        // 👀 View All button action
-       viewBtn.addActionListener(e -> {
-            try {
-                Connection conn = DBhelper.getConnection();
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery("SELECT * FROM employee");
-
-                StringBuilder data = new StringBuilder();
-                while (rs.next()) {
-                    data.append("ID: ").append(rs.getInt("id"))
-                        .append(" | Name: ").append(rs.getString("name"))
-                        .append(" | Age: ").append(rs.getInt("age"))
-                        .append("\n");
-                }
-
-                JOptionPane.showMessageDialog(frame, data.toString());
-
-                rs.close();
-                st.close();
-                conn.close();
-
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(frame, "Error Fetching Data!");
+    private void loadData() {
+        try {
+            tableModel.setRowCount(0);
+            List<Employee> list = dao.getAllEmployees();
+            for (Employee e : list) {
+                tableModel.addRow(new Object[]{e.getId(), e.getName(), e.getAge(), e.getSalary()});
             }
-        });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-        frame.setVisible(true);
+    private void handleDelete() {
+        int row = table.getSelectedRow();
+        if (row != -1) {
+            int id = (int) tableModel.getValueAt(row, 0);
+            try {
+                dao.deleteEmployee(id);
+                loadData();
+            } catch (Exception ex) { ex.printStackTrace(); }
+        }
     }
 }
