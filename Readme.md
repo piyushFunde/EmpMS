@@ -1,4 +1,4 @@
-# Employee Management System
+# Employee Management System (OOPS)
 
 A Java-based payroll and employee management system that demonstrates Object-Oriented Programming (OOP) principles with GUI and database integration.
 
