@@ -1,4 +1,4 @@
-package OOPS.Project;
+package OOPS;
 
 import java.sql.*;
 

@@ -1,7 +1,5 @@
 package OOPS;
 
-import OOPS.EmployeeDAO;
-import OOPS.Employee;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -13,14 +11,18 @@ public class EmployeeGUI extends JFrame {
     private DefaultTableModel tableModel;
     private EmployeeDAO dao = new EmployeeDAO();
 
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new EmployeeGUI());
+    }
+
     public EmployeeGUI() {
-        setTitle("Employee Management System");
+        setTitle("ZenithHR: Employee Management System");
         setSize(800, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
 
         // --- Header ---
-        JLabel title = new JLabel("Employee Management System", JLabel.CENTER);
+        JLabel title = new JLabel("ZenithHR - Talent Management", JLabel.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 24));
         title.setOpaque(true);
         title.setBackground(new Color(41, 128, 185));

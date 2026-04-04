@@ -1,7 +1,5 @@
 package OOPS;
 
-import OOPS.Employee;
-import OOPS.DBhelper;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
