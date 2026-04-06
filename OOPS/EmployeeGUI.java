@@ -1,7 +1,10 @@
 package OOPS;
 
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 import java.awt.*;
 import java.util.List;
 
@@ -9,6 +12,7 @@ public class EmployeeGUI extends JFrame {
     private JTextField nameField, ageField, salaryField;
     private JTable table;
     private DefaultTableModel tableModel;
+    private JTextField searchField;
     private EmployeeDAO dao = new EmployeeDAO();
 
     public static void main(String[] args) {
@@ -20,6 +24,7 @@ public class EmployeeGUI extends JFrame {
         setSize(800, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
+        searchField = new JTextField(20);
 
         // --- Header ---
         JLabel title = new JLabel("ZenithHR - Talent Management", JLabel.CENTER);
@@ -27,7 +32,7 @@ public class EmployeeGUI extends JFrame {
         title.setOpaque(true);
         title.setBackground(new Color(41, 128, 185));
         title.setForeground(Color.WHITE);
-        add(title, BorderLayout.NORTH);
+        
 
         // --- Input Panel ---
         JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
@@ -46,6 +51,15 @@ public class EmployeeGUI extends JFrame {
         addBtn.setBackground(new Color(46, 204, 113));
         addBtn.addActionListener(e -> handleAddEmployee());
         inputPanel.add(addBtn);
+
+        JPanel topPanel = new JPanel();
+        topPanel.add(new JLabel("Search:"));
+        topPanel.add(searchField);
+        JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel.add(title, BorderLayout.NORTH);
+        northPanel.add(topPanel, BorderLayout.SOUTH);
+
+        add(northPanel, BorderLayout.NORTH);
         
         add(inputPanel, BorderLayout.WEST);
 
@@ -53,6 +67,35 @@ public class EmployeeGUI extends JFrame {
         tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Age", "Salary"}, 0);
         table = new JTable(tableModel);
         add(new JScrollPane(table), BorderLayout.CENTER);
+
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(tableModel);
+table.setRowSorter(sorter);
+
+searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+    public void insertUpdate(javax.swing.event.DocumentEvent e) {
+        filter();
+    }
+    public void removeUpdate(javax.swing.event.DocumentEvent e) {
+        filter();
+    }
+    public void changedUpdate(javax.swing.event.DocumentEvent e) {
+        filter();
+    }
+
+    private void filter() {
+        String text = searchField.getText();
+        if (text.trim().length() == 0) {
+            sorter.setRowFilter(null);
+        } else {
+            sorter.setRowFilter(javax.swing.RowFilter.regexFilter("(?i)" + text));
+        }
+    }
+});
+
+tableModel.addRow(new Object[]{1, "John", 25, 5000});
+tableModel.addRow(new Object[]{2, "Alice", 30, 6000});
+tableModel.addRow(new Object[]{3, "HR Team", 28, 4500});
+
 
         // --- Bottom Panel (Actions) ---
         JPanel actionPanel = new JPanel();
@@ -68,7 +111,7 @@ public class EmployeeGUI extends JFrame {
         actionPanel.add(deleteBtn);
         add(actionPanel, BorderLayout.SOUTH);
 
-        loadData();
+        //loadData();
         setVisible(true);
     }
 

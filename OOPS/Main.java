@@ -56,22 +56,9 @@ class PayRollSystem {
 // Main class
 public class Main {
     public static void main(String[] args) {
-        PayRollSystem payRollSystem = new PayRollSystem();
-
-        FulltimeEmployee emp1 = new FulltimeEmployee("Piyush", 3, 5000);
-        PartTimeEmployee emp2 = new PartTimeEmployee("Alex", 2, 40, 100);
-
-        payRollSystem.addEmployee(emp1);
-        payRollSystem.addEmployee(emp2);
-
-        System.out.println("Initial Employee System:");
-        payRollSystem.displayEmployees();
-
-        System.out.println("\nRemoving Employee with ID 2...");
-        payRollSystem.removeEmployee(2);
-
-        System.out.println("\nRemaining Employees Details:");
-        payRollSystem.displayEmployees();
+        javax.swing.SwingUtilities.invokeLater(() -> {
+        new EmployeeGUI();
+        });
     }
 }
 

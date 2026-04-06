@@ -24,8 +24,12 @@ public class EmployeeDAO {
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(query)) {
             while (rs.next()) {
-                list.add(new Employee(rs.getInt("id"), rs.getString("name"), 
-                                     rs.getInt("age"), rs.getDouble("salary")));
+                list.add(new Employee(
+                    rs.getInt("id"),
+                    rs.getString("name"), 
+                    rs.getInt("age"),
+                    rs.getDouble("salary")
+                ));
             }
         }
         return list;
