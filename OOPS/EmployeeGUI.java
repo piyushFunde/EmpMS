@@ -10,6 +10,8 @@ import java.util.List;
 
 public class EmployeeGUI extends JFrame {
     private JTextField nameField, ageField, salaryField;
+    private JComboBox<String> departmentCombo;
+    private JComboBox<String> departmentFilter;
     private JTable table;
     private DefaultTableModel tableModel;
     private JTextField searchField;
@@ -35,7 +37,7 @@ public class EmployeeGUI extends JFrame {
         
 
         // --- Input Panel ---
-        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel inputPanel = new JPanel(new GridLayout(5, 2, 10, 10));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         inputPanel.add(new JLabel("Name:"));
         nameField = new JTextField();
@@ -46,6 +48,9 @@ public class EmployeeGUI extends JFrame {
         inputPanel.add(new JLabel("Salary:"));
         salaryField = new JTextField();
         inputPanel.add(salaryField);
+        inputPanel.add(new JLabel("Department:"));
+        departmentCombo = new JComboBox<>(new String[]{"HR", "IT", "Sales", "Finance", "Marketing"});
+        inputPanel.add(departmentCombo);
 
         JButton addBtn = new JButton("Add Employee");
         addBtn.setBackground(new Color(46, 204, 113));
@@ -55,6 +60,9 @@ public class EmployeeGUI extends JFrame {
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("Search:"));
         topPanel.add(searchField);
+        departmentFilter = new JComboBox<>(new String[]{"All Departments", "HR", "IT", "Sales", "Finance", "Marketing"});
+        topPanel.add(new JLabel("Department:"));
+        topPanel.add(departmentFilter);
         JPanel northPanel = new JPanel(new BorderLayout());
         northPanel.add(title, BorderLayout.NORTH);
         northPanel.add(topPanel, BorderLayout.SOUTH);
@@ -64,7 +72,7 @@ public class EmployeeGUI extends JFrame {
         add(inputPanel, BorderLayout.WEST);
 
         // --- Table Panel ---
-        tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Age", "Salary"}, 0);
+        tableModel = new DefaultTableModel(new String[]{"ID", "Name", "Age", "Salary", "Department"}, 0);
         table = new JTable(tableModel);
         add(new JScrollPane(table), BorderLayout.CENTER);
 
@@ -92,9 +100,9 @@ searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentList
     }
 });
 
-tableModel.addRow(new Object[]{1, "John", 25, 5000});
-tableModel.addRow(new Object[]{2, "Alice", 30, 6000});
-tableModel.addRow(new Object[]{3, "HR Team", 28, 4500});
+tableModel.addRow(new Object[]{1, "John", 25, 5000, "HR"});
+tableModel.addRow(new Object[]{2, "Alice", 30, 6000, "IT"});
+tableModel.addRow(new Object[]{3, "Bob", 28, 4500, "Sales"});
 
 
         // --- Bottom Panel (Actions) ---
@@ -111,7 +119,8 @@ tableModel.addRow(new Object[]{3, "HR Team", 28, 4500});
         actionPanel.add(deleteBtn);
         add(actionPanel, BorderLayout.SOUTH);
 
-        //loadData();
+        departmentFilter.addActionListener(e -> loadData());
+        loadData();
         setVisible(true);
     }
 
@@ -120,13 +129,14 @@ tableModel.addRow(new Object[]{3, "HR Team", 28, 4500});
             String name = nameField.getText();
             int age = Integer.parseInt(ageField.getText());
             double salary = Double.parseDouble(salaryField.getText());
+            String department = (String) departmentCombo.getSelectedItem();
 
-            if (name.isEmpty() || salary <= 0) {
-                JOptionPane.showMessageDialog(this, "Valid Name and Positive Salary required!");
+            if (name.isEmpty() || salary <= 0 || department == null) {
+                JOptionPane.showMessageDialog(this, "Valid Name, Department, and Positive Salary required!");
                 return;
             }
 
-            if (dao.addEmployee(new Employee(name, age, salary))) {
+            if (dao.addEmployee(new Employee(name, age, salary, department))) {
                 JOptionPane.showMessageDialog(this, "Success!");
                 loadData();
             }
@@ -138,9 +148,10 @@ tableModel.addRow(new Object[]{3, "HR Team", 28, 4500});
     private void loadData() {
         try {
             tableModel.setRowCount(0);
-            List<Employee> list = dao.getAllEmployees();
+            String selectedDepartment = (String) departmentFilter.getSelectedItem();
+            List<Employee> list = dao.getEmployeesByDepartment(selectedDepartment == null ? "All Departments" : selectedDepartment);
             for (Employee e : list) {
-                tableModel.addRow(new Object[]{e.getId(), e.getName(), e.getAge(), e.getSalary()});
+                tableModel.addRow(new Object[]{e.getId(), e.getName(), e.getAge(), e.getSalary(), e.getDepartment()});
             }
         } catch (Exception ex) {
             ex.printStackTrace();

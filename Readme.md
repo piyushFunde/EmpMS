@@ -38,7 +38,8 @@ ZenithHR provides a unified platform to manage employee lifecycles, payroll calc
        id INT AUTO_INCREMENT PRIMARY KEY,
        name VARCHAR(100),
        age INT,
-       salary DOUBLE
+       salary DOUBLE,
+       department VARCHAR(50)
    );
    ```
 

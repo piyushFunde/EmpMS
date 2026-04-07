@@ -5,20 +5,23 @@ public class Employee {
     private String name;
     private int age;
     protected double salary;
+    private String department;
 
     // Constructor for new employees from GUI (without ID)
-    public Employee(String name, int age, double salary) {
+    public Employee(String name, int age, double salary, String department) {
         this.name = name;
         this.age = age;
         this.salary = salary;
+        this.department = department;
     }
 
     // Constructor for loading employees from Database (with ID)
-    public Employee(int id, String name, int age, double salary) {
+    public Employee(int id, String name, int age, double salary, String department) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.salary = salary;
+        this.department = department;
     }
 
     // Constructor for backward compatibility with Main.java (name and id only)
@@ -32,9 +35,10 @@ public class Employee {
     public String getName() { return name; }
     public int getAge() { return age; }
     public double getSalary() { return salary; }
+    public String getDepartment() { return department; }
 
     @Override
     public String toString() {
-        return "Employee[id=" + id + ", name=" + name + ", age=" + age + ", salary=" + salary + "]";
+        return "Employee[id=" + id + ", name=" + name + ", age=" + age + ", salary=" + salary + ", department=" + department + "]";
     }
 }
