@@ -2,7 +2,7 @@
 
 A professional Java-based payroll and employee management system demonstrating advanced Object-Oriented Programming (OOP) principles, GUI integration, and secure database management.
 
-## 📋 Project Overview
+## Project Overview
 
 ZenithHR provides a unified platform to manage employee lifecycles, payroll calculations, and persistent data storage.
 
@@ -10,7 +10,7 @@ ZenithHR provides a unified platform to manage employee lifecycles, payroll calc
 - **Modern GUI**: A sleek Swing-based desktop interface for real-time employee management.
 - **Secure Persistence**: Centralized JDBC integration with MySQL using PreparedStatements to prevent SQL injection.
 
-## 🏗️ Architecture & OOP Concepts
+##  Architecture & OOP Concepts
 
 ### Core Components (OOPS Package)
 
@@ -20,7 +20,7 @@ ZenithHR provides a unified platform to manage employee lifecycles, payroll calc
 - **[`EmployeeDAO`](OOPS/EmployeeDAO.java)**: Data Access Object for high-level database operations.
 - **[`DBhelper`](OOPS/DBhelper.java)**: Centralized connection utility for consistent database access.
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Java JDK 8+
@@ -60,7 +60,7 @@ ZenithHR provides a unified platform to manage employee lifecycles, payroll calc
    - **Launch GUI**: `java OOPS.EmployeeGUI`
    - **Run CLI Demo**: `java OOPS.Main`
 
-## 📊 OOP Concepts Demonstrated
+##  OOP Concepts Demonstrated
 
 | Concept | Implementation |
 |---------|-----------------|
@@ -87,7 +87,7 @@ ZenithHR provides a unified platform to manage employee lifecycles, payroll calc
 3. Click **Add Employee** to persist to the database.
 4. Use **Refresh List** to sync with the latest database records.
 
-## 🎯 Future Roadmap
+##  Future Roadmap
 - [ ] User Authentication & Role-based Access
 - [ ] Advanced Reporting (Export to PDF/Excel)
 - [ ] Employee Performance Tracking
