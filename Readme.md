@@ -10,7 +10,11 @@ ZenithHR provides a unified platform to manage employee lifecycles, payroll calc
 - **Modern GUI**: A sleek Swing-based desktop interface for real-time employee management.
 - **Secure Persistence**: Centralized JDBC integration with MySQL using PreparedStatements to prevent SQL injection.
 
-##  Architecture & OOP Concepts
+##  Architecture Diagram
+
+<img width="3594" height="4969" alt="diagram (2)" src="https://github.com/user-attachments/assets/109f8e0c-5da2-4d60-9ca3-0650d6866abe" />
+
+---
 
 ### Core Components (OOPS Package)
 
